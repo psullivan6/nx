@@ -7,12 +7,14 @@ import { join } from 'path';
  * we duplicate the helper functions from @nx/workspace in this file.
  */
 
-export const packageManagerList = ['pnpm', 'yarn', 'npm'] as const;
+export const packageManagerList = ['pnpm', 'yarn', 'npm', 'bun'] as const;
 
 export type PackageManager = typeof packageManagerList[number];
 
 export function detectPackageManager(dir: string = ''): PackageManager {
-  return existsSync(join(dir, 'yarn.lock'))
+  return existsSync(join(dir, 'bun.lockb'))
+    ? 'bun'
+    : existsSync(join(dir, 'yarn.lock'))
     ? 'yarn'
     : existsSync(join(dir, 'pnpm-lock.yaml'))
     ? 'pnpm'
@@ -72,6 +74,12 @@ export function getPackageManagerCommand(
         install: 'npm install --silent --ignore-scripts',
         exec: 'npx',
         globalAdd: 'npm i -g',
+      };
+    case 'bun':
+      return {
+        install: 'bun install --silent --ignore-scripts',
+        exec: 'bunx',
+        globalAdd: 'bun install -g',
       };
   }
 }
