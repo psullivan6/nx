@@ -58,6 +58,9 @@ jobs:
           - host: ubuntu-latest
             target: aarch64-unknown-linux-gnu
             docker: ghcr.io/napi-rs/napi-rs/nodejs-rust:lts-debian-aarch64
+            setup: |
+              rustup toolchain install nightly-2024-04-29
+              rustup default nightly-2024-04-29
             build: |-
               set -e &&
               pnpm --version &&
@@ -68,6 +71,8 @@ jobs:
             setup: |
               sudo apt-get update
               sudo apt-get install gcc-arm-linux-gnueabihf -y
+              rustup toolchain install nightly-2024-04-29
+              rustup default nightly-2024-04-29
             build: |
               pnpm nx run-many --target=build-native -- --target=armv7-unknown-linux-gnueabihf
           # Android (not needed)
@@ -88,12 +93,16 @@ jobs:
               pnpm install --frozen-lockfile &&
               pnpm nx run-many --verbose --target=build-native -- --target=aarch64-unknown-linux-musl
           - host: ubuntu-latest
-            target: wasm32-wasi-preview1-threads
+            target: wasm32-wasip1-threads
+            #            setup: |-
+            #              set -e &&
+            #              rustup update &&
+            #              rustup target add wasm32-wasip1-threads
             build: |-
               set -e &&
               pnpm --version &&
-              pnpm exec napi build --release --platform -c packages/nx/package.json --manifest-path packages/nx/Cargo.toml --js ./index.js -o packages/nx/src/native --target wasm32-wasi-preview1-threads
-              #              pnpm nx run-many --target=build-native -- --target=wasm32-wasi-preview1-threads
+              pnpm exec napi build --release --platform -c packages/nx/package.json --manifest-path packages/nx/Cargo.toml --js ./index.js -o packages/nx/src/native --target wasm32-wasip1-threads
+              #              pnpm nx run-many --target=build-native -- --target=wasm32-wasip1-threads
           - host: windows-latest
             target: aarch64-pc-windows-msvc
             build: pnpm nx run-many --target=build-native -- --target=aarch64-pc-windows-msvc
@@ -115,10 +124,10 @@ jobs:
           cache: 'pnpm'
 
       - name: Install
-        uses: dtolnay/rust-toolchain@stable
+        uses: dtolnay/rust-toolchain@master
         if: ${{ !matrix.settings.docker }}
         with:
-          toolchain: nightly-2024-04-18
+          toolchain: nightly-2024-04-29
           targets: ${{ matrix.settings.target }}
 
       - name: Cache cargo
@@ -167,10 +176,12 @@ jobs:
         if: ${{ !matrix.settings.docker }}
         shell: bash
       - name: Upload artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: bindings-${{ matrix.settings.target }}
-          path: packages/**/*.node
+          path: |
+            packages/**/*.node
+            packages/**/*.wasm
           if-no-files-found: error
 
   build-freebsd:
@@ -202,7 +213,7 @@ jobs:
             sudo pkg install -y -f node libnghttp2 npm git
             sudo npm install --location=global --ignore-scripts pnpm@8.15.7
             curl https://sh.rustup.rs -sSf --output rustup.sh
-            sh rustup.sh -y --profile minimal --default-toolchain stable
+            sh rustup.sh -y --profile minimal --default-toolchain nightly-2024-04-29
             source "$HOME/.cargo/env"
             echo "~~~~ rustc --version ~~~~"
             rustc --version
