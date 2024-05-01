@@ -43,8 +43,7 @@ width="100%" alt="Nx - Smart Monorepos · Fast CI"></a></p>
 
 ## Want to help?
 
-If you want to file a bug or submit a PR, read up on
-our [guidelines for contributing](https://github.com/nrwl/nx/blob/master/CONTRIBUTING.md) and watch this video that will
+If you want to file a bug or submit a PR, read up on our [guidelines for contributing](https://github.com/nrwl/nx/blob/master/CONTRIBUTING.md) and watch this video that will
 help you get started.
 
 <a href="https://www.youtube.com/watch?v=8LCA_4qxc08" target="_blank" rel="noreferrer">
