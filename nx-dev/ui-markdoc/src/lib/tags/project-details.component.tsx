@@ -1,3 +1,4 @@
+'use client';
 import { JSX, ReactElement, useEffect, useState } from 'react';
 import { Provider as StoreProvider } from 'react-redux';
 import { rootStore } from '@nx/graph/state';
