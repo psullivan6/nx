@@ -33,7 +33,7 @@ describe('convertToCypressTen', () => {
     mockedInstalledCypressVersion.mockReturnValue(9);
   });
 
-  afterEach(() => {
+  afterAll(() => {
     jest.resetAllMocks();
   });
 
