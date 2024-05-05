@@ -503,15 +503,6 @@
         "type": "generator"
       },
       {
-        "description": "Add a Cypress E2E Project.",
-        "file": "generated/packages/cypress/generators/cypress-project.json",
-        "hidden": true,
-        "name": "cypress-project",
-        "originalFilePath": "/packages/cypress/src/generators/cypress-project/schema.json",
-        "path": "cypress/generators/cypress-project",
-        "type": "generator"
-      },
-      {
         "description": "Add a Cypress E2E Configuration to an existing project.",
         "file": "generated/packages/cypress/generators/configuration.json",
         "hidden": false,
@@ -536,6 +527,15 @@
         "name": "migrate-to-cypress-11",
         "originalFilePath": "/packages/cypress/src/generators/migrate-to-cypress-11/schema.json",
         "path": "cypress/generators/migrate-to-cypress-11",
+        "type": "generator"
+      },
+      {
+        "description": "Convert existing Cypress project(s) using `@nx/cypress:cypress` executor to use `@nx/cypress/plugin`.",
+        "file": "generated/packages/cypress/generators/convert-to-inferred.json",
+        "hidden": false,
+        "name": "convert-to-inferred",
+        "originalFilePath": "/packages/cypress/src/generators/convert-to-inferred/schema.json",
+        "path": "cypress/generators/convert-to-inferred",
         "type": "generator"
       }
     ],
@@ -753,6 +753,15 @@
         "name": "convert-to-flat-config",
         "originalFilePath": "/packages/eslint/src/generators/convert-to-flat-config/schema.json",
         "path": "eslint/generators/convert-to-flat-config",
+        "type": "generator"
+      },
+      {
+        "description": "Convert existing ESLint project(s) using `@nx/eslint:lint` executor to use `@nx/eslint/plugin`.",
+        "file": "generated/packages/eslint/generators/convert-to-inferred.json",
+        "hidden": false,
+        "name": "convert-to-inferred",
+        "originalFilePath": "/packages/eslint/src/generators/convert-to-inferred/schema.json",
+        "path": "eslint/generators/convert-to-inferred",
         "type": "generator"
       }
     ],
@@ -1042,6 +1051,15 @@
         "name": "init",
         "originalFilePath": "/packages/gradle/src/generators/init/schema.json",
         "path": "gradle/generators/init",
+        "type": "generator"
+      },
+      {
+        "description": "Setup a CI Workflow to run Nx in CI",
+        "file": "generated/packages/gradle/generators/ci-workflow.json",
+        "hidden": false,
+        "name": "ci-workflow",
+        "originalFilePath": "/packages/gradle/src/generators/ci-workflow/schema.json",
+        "path": "gradle/generators/ci-workflow",
         "type": "generator"
       }
     ],
@@ -2038,17 +2056,7 @@
         "originalFilePath": "shared/packages/plugin/plugin"
       }
     ],
-    "executors": [
-      {
-        "description": "Creates and runs the E2E tests for an Nx Plugin.",
-        "file": "generated/packages/plugin/executors/e2e.json",
-        "hidden": false,
-        "name": "e2e",
-        "originalFilePath": "/packages/plugin/src/executors/e2e/schema.json",
-        "path": "plugin/executors/e2e",
-        "type": "executor"
-      }
-    ],
+    "executors": [],
     "generators": [
       {
         "description": "Create a Nx Plugin.",

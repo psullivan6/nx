@@ -3,7 +3,7 @@
 import type { TargetConfiguration } from '@nx/devkit';
 
 import { JsonCodeBlock } from '@nx/graph/ui-code-block';
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useContext, useEffect, useMemo, useState } from 'react';
 import { SourceInfo } from '../source-info/source-info';
 import { FadingCollapsible } from './fading-collapsible';
 import { TargetConfigurationProperty } from './target-configuration-property';
@@ -16,33 +16,26 @@ import {
 } from '@nx/graph/ui-tooltips';
 import { TooltipTriggerText } from './tooltip-trigger-text';
 import { Pill } from '../pill';
-import {
-  mapDispatchToProps,
-  mapStateToProps,
-  mapDispatchToPropsType,
-  mapStateToPropsType,
-} from './target-configuration-details.state';
-import { connect } from 'react-redux';
 import { TargetConfigurationDetailsHeader } from '../target-configuration-details-header/target-configuration-details-header';
+import { ExpandedTargetsContext } from '@nx/graph/shared';
 
-type TargetConfigurationDetailsProps = mapStateToPropsType &
-  mapDispatchToPropsType & {
+interface TargetConfigurationDetailsProps {
+  projectName: string;
+  targetName: string;
+  targetConfiguration: TargetConfiguration;
+  sourceMap: Record<string, string[]>;
+  variant?: 'default' | 'compact';
+  onCollapse?: (targetName: string) => void;
+  onExpand?: (targetName: string) => void;
+  onRunTarget?: (data: { projectName: string; targetName: string }) => void;
+  onViewInTaskGraph?: (data: {
     projectName: string;
     targetName: string;
-    targetConfiguration: TargetConfiguration;
-    sourceMap: Record<string, string[]>;
-    variant?: 'default' | 'compact';
-    onCollapse?: (targetName: string) => void;
-    onExpand?: (targetName: string) => void;
-    onRunTarget?: (data: { projectName: string; targetName: string }) => void;
-    onViewInTaskGraph?: (data: {
-      projectName: string;
-      targetName: string;
-    }) => void;
-    collapsable: boolean;
-  };
+  }) => void;
+  collapsable: boolean;
+}
 
-export const TargetConfigurationDetailsComponent = ({
+export default function TargetConfigurationDetails({
   variant,
   projectName,
   targetName,
@@ -50,27 +43,28 @@ export const TargetConfigurationDetailsComponent = ({
   sourceMap,
   onViewInTaskGraph,
   onRunTarget,
-  expandedTargets,
-  toggleExpandTarget,
   collapsable,
-}: TargetConfigurationDetailsProps) => {
+}: TargetConfigurationDetailsProps) {
   const isCompact = variant === 'compact';
   const [collapsed, setCollapsed] = useState(true);
+  const { expandedTargets, toggleTarget } = useContext(ExpandedTargetsContext);
 
   const handleCopyClick = async (copyText: string) => {
     await window.navigator.clipboard.writeText(copyText);
   };
 
   const handleCollapseToggle = useCallback(() => {
-    toggleExpandTarget(targetName);
-  }, [toggleExpandTarget, targetName]);
+    if (toggleTarget) {
+      toggleTarget(targetName);
+    }
+  }, [toggleTarget, targetName]);
 
   useEffect(() => {
     if (!collapsable) {
       setCollapsed(false);
       return;
     }
-    if (expandedTargets.includes(targetName)) {
+    if (expandedTargets?.includes(targetName)) {
       setCollapsed(false);
     } else {
       setCollapsed(true);
@@ -141,7 +135,7 @@ export const TargetConfigurationDetailsComponent = ({
               {singleCommand ? (
                 <span className="font-medium">
                   Command
-                  <span className="ml-2 mb-1 hidden group-hover:inline">
+                  <span className="mb-1 ml-2 hidden group-hover:inline">
                     <CopyToClipboard
                       onCopy={() =>
                         handleCopyClick(`"command": "${singleCommand}"`)
@@ -191,7 +185,7 @@ export const TargetConfigurationDetailsComponent = ({
                     <TooltipTriggerText>Inputs</TooltipTriggerText>
                   </span>
                 </Tooltip>
-                <span className="ml-2 mb-1 hidden group-hover:inline">
+                <span className="mb-1 ml-2 hidden group-hover:inline">
                   <CopyToClipboard
                     onCopy={() =>
                       handleCopyClick(
@@ -241,7 +235,7 @@ export const TargetConfigurationDetailsComponent = ({
                     <TooltipTriggerText>Outputs</TooltipTriggerText>
                   </span>
                 </Tooltip>
-                <span className="ml-2 mb-1 hidden group-hover:inline">
+                <span className="mb-1 ml-2 hidden group-hover:inline">
                   <CopyToClipboard
                     onCopy={() =>
                       handleCopyClick(
@@ -420,10 +414,4 @@ export const TargetConfigurationDetailsComponent = ({
       )}
     </div>
   );
-};
-
-export const TargetConfigurationDetails = connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(TargetConfigurationDetailsComponent);
-export default TargetConfigurationDetails;
+}

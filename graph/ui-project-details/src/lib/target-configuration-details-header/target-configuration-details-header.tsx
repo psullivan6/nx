@@ -64,7 +64,7 @@ export const TargetConfigurationDetailsHeader = ({
         collapsable ? 'cursor-pointer' : '',
         isCompact ? 'px-2 py-1' : 'p-2',
         !isCollasped || !collapsable
-          ? 'border-b bg-slate-50 dark:border-slate-700/60 dark:border-slate-300/10 dark:bg-slate-800 '
+          ? 'border-b bg-slate-50 dark:border-slate-700/60 dark:bg-slate-800'
           : ''
       )}
       onClick={collapsable ? toggleCollapse : undefined}
@@ -81,6 +81,7 @@ export const TargetConfigurationDetailsHeader = ({
           <TargetTechnologies
             technologies={targetConfiguration.metadata?.technologies}
             showTooltip={!isCollasped}
+            className="h-4 w-4"
           />
           {isCollasped &&
             targetConfiguration?.executor !== '@nx/js:release-publish' && (
@@ -148,14 +149,14 @@ export const TargetConfigurationDetailsHeader = ({
         </div>
       </div>
       {!isCollasped && (
-        <div className="mt-2 ml-5 text-sm">
+        <div className="ml-5 mt-2 text-sm">
           <SourceInfo
             data={sourceMap[`targets.${targetName}`]}
             propertyKey={`targets.${targetName}`}
             color="text-gray-500 dark:text-slate-400"
           />
           {targetName !== 'nx-release-publish' && (
-            <div className="text-right">
+            <div className="mt-2 text-right">
               <code className="ml-4 rounded bg-gray-100 px-2 py-1 font-mono text-gray-800 dark:bg-gray-700 dark:text-gray-300">
                 nx run {projectName}:{targetName}
               </code>
