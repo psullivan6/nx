@@ -59,8 +59,8 @@ jobs:
             target: aarch64-unknown-linux-gnu
             docker: ghcr.io/napi-rs/napi-rs/nodejs-rust:lts-debian-aarch64
             setup: |
-              rustup toolchain install nightly-2024-04-29
-              rustup default nightly-2024-04-29
+              rustup toolchain install nightly
+              rustup default nightly
             build: |-
               set -e &&
               pnpm --version &&
@@ -71,8 +71,8 @@ jobs:
             setup: |
               sudo apt-get update
               sudo apt-get install gcc-arm-linux-gnueabihf -y
-              rustup toolchain install nightly-2024-04-29
-              rustup default nightly-2024-04-29
+              rustup toolchain install nightly
+              rustup default nightly
             build: |
               pnpm nx run-many --target=build-native -- --target=armv7-unknown-linux-gnueabihf
           # Android (not needed)
@@ -127,7 +127,7 @@ jobs:
         uses: dtolnay/rust-toolchain@master
         if: ${{ !matrix.settings.docker }}
         with:
-          toolchain: nightly-2024-04-29
+          toolchain: nightly
           targets: ${{ matrix.settings.target }}
 
       - name: Cache cargo
@@ -213,7 +213,7 @@ jobs:
             sudo pkg install -y -f node libnghttp2 npm git
             sudo npm install --location=global --ignore-scripts pnpm@8.15.7
             curl https://sh.rustup.rs -sSf --output rustup.sh
-            sh rustup.sh -y --profile minimal --default-toolchain nightly-2024-04-29
+            sh rustup.sh -y --profile minimal --default-toolchain nightly
             source "$HOME/.cargo/env"
             echo "~~~~ rustc --version ~~~~"
             rustc --version
