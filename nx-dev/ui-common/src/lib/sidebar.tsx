@@ -1,3 +1,4 @@
+'use client';
 import { Dialog, Transition } from '@headlessui/react';
 import { Menu, MenuItem, MenuSection } from '@nx/nx-dev/models-menu';
 import cx from 'classnames';

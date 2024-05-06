@@ -1,3 +1,4 @@
+'use client';
 import { Menu, MenuItem, MenuSection } from '@nx/nx-dev/models-menu';
 import { Sidebar, SidebarMobile } from './sidebar';
 import { useMemo } from 'react';
@@ -129,7 +130,7 @@ export function SidebarContainer({
   return (
     <div id="sidebar" data-testid="sidebar">
       <SidebarMobile menu={menuWithRspack} navIsOpen={navIsOpen} />
-      <div className="hidden h-full w-72 flex-col border-r border-slate-200 dark:border-slate-700 dark:bg-slate-900 md:flex">
+      <div className="hidden h-full w-72 flex-col border-r border-slate-200 md:flex dark:border-slate-700 dark:bg-slate-900">
         <div className="relative flex flex-grow overflow-y-scroll p-4">
           <Sidebar menu={menuWithRspack} />
         </div>
