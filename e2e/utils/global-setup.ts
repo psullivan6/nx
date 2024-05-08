@@ -9,6 +9,10 @@ import { Config } from '@jest/types';
 import * as isCI from 'is-ci';
 import { performance } from 'node:perf_hooks';
 
+if (process.env.NX_PERF_LOGGING === 'true') {
+  require('../../packages/nx/src/utils/perf-logging');
+}
+
 const LARGE_BUFFER = 1024 * 1000000;
 
 export default async function (globalConfig: Config.ConfigGlobals) {
