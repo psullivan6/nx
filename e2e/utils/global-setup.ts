@@ -7,10 +7,12 @@ import { tmpdir } from 'tmp';
 import { existsSync, removeSync } from 'fs-extra';
 import { Config } from '@jest/types';
 import * as isCI from 'is-ci';
+import { performance } from 'node:perf_hooks';
 
 const LARGE_BUFFER = 1024 * 1000000;
 
 export default async function (globalConfig: Config.ConfigGlobals) {
+  performance.mark('global-setup:start');
   const isVerbose: boolean =
     process.env.NX_VERBOSE_LOGGING === 'true' || !!globalConfig.verbose;
   const storageLocation = join(
@@ -23,8 +25,15 @@ export default async function (globalConfig: Config.ConfigGlobals) {
     verbose: isVerbose,
     storage: storageLocation,
   });
+  performance.mark('global-setup:registry-started');
+  performance.measure(
+    'global-setup-registry',
+    'global-setup:start',
+    'global-setup:registry-started'
+  );
 
   if (process.env.NX_E2E_SKIP_CLEANUP !== 'true' || !existsSync('./build')) {
+    performance.mark('global-setup:publish-packages-start');
     if (!isCI) {
       registerTsConfigPaths(join(__dirname, '../../tsconfig.base.json'));
       const { e2eCwd } = await import('./get-env-info');
@@ -46,6 +55,12 @@ export default async function (globalConfig: Config.ConfigGlobals) {
         publishProcess?.stderr?.on('data', (data) => (logs += data));
       }
       publishProcess.on('exit', (code) => {
+        performance.mark('global-setup:publish-packages-exit');
+        performance.measure(
+          'global-setup-publish-packages',
+          'global-setup:publish-packages-start',
+          'global-setup:publish-packages-exit'
+        );
         if (code && code > 0) {
           if (!isVerbose) {
             console.log(logs.toString());
