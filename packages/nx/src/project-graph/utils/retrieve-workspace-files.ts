@@ -16,6 +16,7 @@ import {
 } from '../../utils/workspace-context';
 import { buildAllWorkspaceFiles } from './build-all-workspace-files';
 import { join } from 'path';
+import { ProjectConfigurationsError } from '../error-types';
 
 /**
  * Walks the workspace directory to create the `projectFileMap`, `ProjectConfigurations` and `allWorkspaceFiles`
@@ -74,6 +75,29 @@ export function retrieveProjectConfigurations(
     workspaceFiles,
     plugins
   );
+}
+
+export async function retrieveProjectConfigurationsWithPartialResult(
+  plugins: LoadedNxPlugin[],
+  workspaceRoot: string,
+  nxJson: NxJsonConfiguration
+): Promise<ConfigurationResult> {
+  let projConfigs: ConfigurationResult;
+  try {
+    projConfigs = await retrieveProjectConfigurations(
+      plugins,
+      workspaceRoot,
+      nxJson
+    );
+  } catch (e) {
+    // Errors are okay for this because we're only running 1 plugin
+    if (e instanceof ProjectConfigurationsError) {
+      projConfigs = e.partialProjectConfigurationsResult;
+    } else {
+      throw e;
+    }
+  }
+  return projConfigs;
 }
 
 export async function retrieveProjectConfigurationsWithAngularProjects(
