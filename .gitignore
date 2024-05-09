@@ -42,6 +42,7 @@ out
 .nx
 
 *.node
+!/zlocal-verdaccio-storage/**/*.node
 
 # Fix for issue when working on the repo in a dev container
 .pnpm-store
