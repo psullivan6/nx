@@ -1,2 +1,3 @@
 nx-dev/**/jest.config.js
 .next
+zlocal-verdaccio-storage/**
